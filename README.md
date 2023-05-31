@@ -1,0 +1,2 @@
+# GPLearnFinance3D
+对GPLearn完成了三维改造，并且增加了IC,IR,RankIC等指标，增加了样本内样本外的数据保存，增加了基于IC追踪所有generation中符合要求的因子并保存的功能。
