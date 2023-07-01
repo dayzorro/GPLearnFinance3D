@@ -11,7 +11,7 @@ gplearnRPC._program 模块主要包含了对如何构建遗传算法表达式进
 这个文件主要设计了表达式构建的具体的结构，具体的遗传，变异以及突变的方案可以参考gplearnRPC.genetic
 Author: Shawn_RPC
 '''
-from copy import copy
+from copy import copy,deepcopy
 import numpy as np
 from sklearn.utils.random import sample_without_replacement
 from functions import _Function
@@ -762,7 +762,7 @@ class _Program(object):
 
     def reproduce(self):
         """Return a copy of the embedded program."""
-        return copy(self.program)
+        return deepcopy(self.program)
 
     def crossover(self, donor, random_state):
         """Perform the crossover genetic operation on the program.
@@ -872,7 +872,7 @@ class _Program(object):
             The flattened tree representation of the program.
 
         """
-        program = copy(self.program)
+        program = deepcopy(self.program)
 
         # Get the nodes to modify
         mutate = np.where(random_state.uniform(size=len(program)) <
@@ -885,6 +885,8 @@ class _Program(object):
                 replacement = len(self.arities[arity])
                 replacement = random_state.randint(replacement)
                 replacement = self.arities[arity][replacement]
+                # 这里在替换的时候由于是随机增加一个算子所以需要把算子的窗口值不变替换过去。
+                replacement.baseConst = program[node].baseConst
                 program[node] = replacement
             else:
                 # We've got a terminal, add a const or variable
